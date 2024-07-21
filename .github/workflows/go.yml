@@ -2,17 +2,18 @@ name: Testando minha aplicacao
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ '*' ]
 
 jobs:
 
   Teste:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
     strategy:
       matrix:
         go_versions: ['1.18', '1.17', '>=1.18']
+        os : ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v4
 
@@ -33,7 +34,10 @@ jobs:
 
   Build:
     needs: Teste
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os : ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v4
     - name: Build
