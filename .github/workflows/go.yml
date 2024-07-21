@@ -1,4 +1,4 @@
-name: Testando minha aplicacao
+name: CI
 
 on:
   push:
@@ -8,36 +8,36 @@ on:
 
 jobs:
 
-  Teste:
-    runs-on: ${{matrix.os}}
+  test:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go_versions: ['1.18', '1.17', '>=1.18']
-        os : ['ubuntu-latest', 'ubuntu-18.04']
+        go_version: ['1.18', '1.17', '>=1.18']
+        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: ${{matrix.go_versions}}
-
-    - name: build banco de dados
+        go-version: ${{ matrix.go_version }}
+      
+    - name: Build banco de dados
       run: docker-compose build
-
-    - name: criando banco de dados
+      
+    - name: Create-DB and user
       run: docker-compose up -d
 
-    - name: Test
-      run: go test -v main_test.go
-
-
-  Build:
-    needs: Teste
-    runs-on: ${{matrix.os}}
+    - name: Testes
+      run: go test -v main_test.go 
+      
+  
+  build:
+    needs: test
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os : ['ubuntu-latest', 'ubuntu-18.04']
+        os: ['ubuntu-latest', 'ubuntu-18.04']
     steps:
     - uses: actions/checkout@v4
     - name: Build
