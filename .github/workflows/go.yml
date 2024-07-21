@@ -10,13 +10,16 @@ jobs:
 
   Teste:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_versions: ['1.18', '1.17', '>=1.18']
     steps:
     - uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.20'
+        go-version: ${{matrix.go_versions}}
 
     - name: build banco de dados
       run: docker-compose build
