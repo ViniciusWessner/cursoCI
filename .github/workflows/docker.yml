@@ -24,4 +24,14 @@ jobs:
       with:
         username: wessnervini
         password: ${{ secrets.DOCKER_HUB_LOGIN }}         
-    
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v6.5.0
+      with:
+          context: .
+          file: ./dockerfile
+          push: true
+          tags: wessnervini/cursoci:${{github.ref_name}}
+
+          
+
