@@ -40,16 +40,19 @@ jobs:
   
   build:
     needs: test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: ['ubuntu-latest']
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Build
       run: go build -v main.go
 
+    - name: build artefato 
+      uses: actions/upload-artifact@v4.3.4
+      with:
+        name: apigo
+        path: main
+
   docker:
     needs: build
     uses: ./.github/workflows/docker.yml
-    secrets: inherit
+    secrets: inherit            
